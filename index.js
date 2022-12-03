@@ -1,5 +1,4 @@
 const jsonServer = require('json-server');
-// const cors = require('cors');
 
 const db = {
     garage: [
@@ -34,8 +33,6 @@ const db = {
 };
 
 const server = jsonServer.create();
-// server.use(cors());
-
 const router = jsonServer.router(db);
 const middlewares = jsonServer.defaults();
 
@@ -45,15 +42,7 @@ const state = { velocity: {}, blocked: {} };
 
 server.use(middlewares);
 
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-});
-
-server.patch('/engine', (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-
+server.patch('/engine', (req, res) => {
     const { id, status } = req.query;
 
     if (!id || !status || !/^(started)|(stopped)|(drive)$/.test(status)) {
@@ -102,11 +91,6 @@ server.patch('/engine', (req, res, next) => {
 
         setTimeout(() => res.header('Content-Type', 'application/json').status(200).send(JSON.stringify({ velocity, distance })), x);
     }
-});
-
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
 });
 
 server.use(router);
