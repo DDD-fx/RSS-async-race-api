@@ -50,8 +50,9 @@ server.use((req, res, next) => {
     next();
 });
 
-server.patch('/engine', (req, res) => {
+server.patch('/engine', (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
+    next();
 
     const { id, status } = req.query;
 
@@ -101,6 +102,11 @@ server.patch('/engine', (req, res) => {
 
         setTimeout(() => res.header('Content-Type', 'application/json').status(200).send(JSON.stringify({ velocity, distance })), x);
     }
+});
+
+server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
 });
 
 server.use(router);
