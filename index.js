@@ -1,5 +1,5 @@
 const jsonServer = require('json-server');
-const cors = require('cors');
+// const cors = require('cors');
 
 const db = {
     garage: [
@@ -34,10 +34,10 @@ const db = {
 };
 
 const server = jsonServer.create();
-server.use(cors());
+// server.use(cors());
 
 const router = jsonServer.router(db);
-const middlewares = jsonServer.defaults({ noCors: true });
+const middlewares = jsonServer.defaults();
 
 const PORT = 3000;
 
@@ -45,8 +45,14 @@ const state = { velocity: {}, blocked: {} };
 
 server.use(middlewares);
 
+server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
 
 server.patch('/engine', (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+
     const { id, status } = req.query;
 
     if (!id || !status || !/^(started)|(stopped)|(drive)$/.test(status)) {
@@ -98,13 +104,6 @@ server.patch('/engine', (req, res) => {
 });
 
 server.use(router);
-
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Headers', '*')
-    next()
-})
-
 server.listen(PORT, () => {
     console.log('Server is running on port', PORT);
 });
