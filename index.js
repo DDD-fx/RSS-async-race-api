@@ -1,5 +1,5 @@
 const jsonServer = require('json-server');
-const cors = require('cors');
+// const cors = require('cors');
 
 const db = {
     garage: [
@@ -34,10 +34,10 @@ const db = {
 };
 
 const server = jsonServer.create();
-server.use(cors());
+// server.use(cors());
 
 const router = jsonServer.router(db);
-const middlewares = jsonServer.defaults();
+const middlewares = jsonServer.defaults({ noCors: true });
 
 const PORT = 3000;
 
