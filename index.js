@@ -34,17 +34,16 @@ const db = {
 };
 
 const server = jsonServer.create();
+server.use(cors());
 
+const router = jsonServer.router(db);
 const middlewares = jsonServer.defaults();
 
 const PORT = 3000;
 
 const state = { velocity: {}, blocked: {} };
 
-server.use(cors());
 server.use(middlewares);
-
-const router = jsonServer.router(db);
 
 // server.use((req, res, next) => {
 //     res.header('Access-Control-Allow-Origin', '*');
